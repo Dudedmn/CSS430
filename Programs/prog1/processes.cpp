@@ -11,6 +11,9 @@ Emulate linux command of: ps -A | grep argv[1] | wc -l
 #include <unistd.h>  //fork, pipe
 #include <sys/wait.h> //wait
 
+//Main running process, expects 2 arguments.
+//Format for expected input: {EXECUTION_NAME} {CURRENT_PROCESS}
+//Where CURRENT_PROCESS is any process identified by 'ps -A'
 int main(int argc, char * argv[])
 {
     //Check number of arguments
@@ -21,7 +24,6 @@ int main(int argc, char * argv[])
     }
    //Enum for 2 states possible in pipe
    enum {READ, WRITE};
-   //const int READ = 0, WRITE = 1;
    //Set a pid id for the fork()
    pid_t pid;
    //Make pipe arrays for necessary pipe states
