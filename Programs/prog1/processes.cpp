@@ -24,12 +24,10 @@ int main(int argc, char * argv[])
     }
    //Enum for 2 states possible in pipe
    enum {READ, WRITE};
-   //Set a pid id for the fork()
-   pid_t pid;
+   //Set a pid id for the fork(), set a status to wait
+   pid_t pid, childStatus;
    //Make pipe arrays for necessary pipe states
    int pipeFD1[2], pipeFD2[2];
-   //Status to wait fro all childs to finish
-   int childStatus;
     //Create pipes and check read state
    if (pipe(pipeFD1) < 0 || pipe(pipeFD2) < 0)
    {
