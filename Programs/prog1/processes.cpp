@@ -20,8 +20,8 @@ int main(int argc, char * argv[])
        exit(EXIT_FAILURE); //Exit main
     }
    //Enum for 2 states possible in pipe
-   //enum {READ = 0, WRITE = 1};
-   const int READ = 0, WRITE = 1;
+   enum {READ, WRITE};
+   //const int READ = 0, WRITE = 1;
    //Set a pid id for the fork()
    pid_t pid;
    //Make pipe arrays for necessary pipe states
