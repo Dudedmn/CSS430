@@ -1,0 +1,26 @@
+Script started on Sun 14 Apr 2019 07:32:58 PM PDT
+]0;daniely@uw1-320-07: ~[01;32mdaniely@uw1-320-07[00m:[01;34m~[00m$ ps -A | grep ke[Kworker | wc-[K -l
+45
+]0;daniely@uw1-320-07: ~[01;32mdaniely@uw1-320-07[00m:[01;34m~[00m$ ./processes kworker
+child: 6101
+grandchild: 6102
+great-grandchild: 6103
+45
+]0;daniely@uw1-320-07: ~[01;32mdaniely@uw1-320-07[00m:[01;34m~[00m$ ps -A | grep sshd | wc -l
+222
+]0;daniely@uw1-320-07: ~[01;32mdaniely@uw1-320-07[00m:[01;34m~[00m$ ./processes kwo[K[K[Ksshd
+child: 6141
+grandchild: 6142
+great-grandchild: 6143
+222
+]0;daniely@uw1-320-07: ~[01;32mdaniely@uw1-320-07[00m:[01;34m~[00m$ ps -A | grep scsi | wc -l
+12
+]0;daniely@uw1-320-07: ~[01;32mdaniely@uw1-320-07[00m:[01;34m~[00m$ ./processes scsi
+child: 6199
+grandchild: 6200
+great-grandchild: 6201
+12
+]0;daniely@uw1-320-07: ~[01;32mdaniely@uw1-320-07[00m:[01;34m~[00m$ exit
+exit
+
+Script done on Sun 14 Apr 2019 07:34:05 PM PDT
