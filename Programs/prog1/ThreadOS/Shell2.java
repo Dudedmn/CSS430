@@ -1,36 +1,104 @@
 import java.util.*;
+/*
+Author: Daniel Yan
+Program: Shell.java
+Purpose: Shell program built to load programs in sequential or concurrent
+processes. Uses a HashSet as part of its implementation (unordered set)
+See https://stackoverflow.com/questions/5139724/whats-the-difference-between-hashset-and-set
+for more clarification on HashSet usage
+*/
 
 class Shell2 extends Thread
 {
-   //command line string to contain the full command
-   private String cmdLine;
-
-   // constructor for shell
-   public Shell2( ) {
-      cmdLine = "";
+   //Constructor for Shell
+   public Shell2()
+   {
    }
 
-   // required run method for this Shell Thread
-   public void run( ) {
-
-      // build a simple command that invokes PingPong 
-      cmdLine = "PingPong abc 100";
-
-      // must have an array of arguments to pass to exec()
-	SysLib.cout("Shell2 is starting\n");
-	StringBuffer buffer = new StringBuffer();
-	SysLib.cin(buffer);
-      String[] args = SysLib.stringToArgs(buffer.toString());
-      SysLib.cout("Your command:\t" + buffer.toString());
-
-      // run the command
-      int tid = SysLib.exec( args );
-      SysLib.cout("Started Thread tid=" + tid + "\n");
-
-      // wait for completion then exit back to ThreadOS
-      SysLib.join();
-      SysLib.cout("Done!\n");
-      SysLib.exit();
-   }
+   //Required run method for Thread
+   //Run the actual Shell
+   public void run()
+   {
+     //Keep count of number of runs
+     int runCount = 1;
+     //HashSet (unordered) made to count current processes
+     Set<Integer> currentProcesses = new HashSet<Integer>();
+     //Initial starting message
+     SysLib.cout("Shell2 is starting\nEnter 'exit' to quit Shell\n");
+     while(true)
+     {
+      //Print out shell number of statements
+      SysLib.cout("shell[" + runCount + "]% ");
+    	StringBuffer buffer = new StringBuffer(); //Buffer to read
+    	SysLib.cin(buffer); //Buffer input
+      if(buffer.toString().equals("exit"))
+      {
+        SysLib.cout("Exiting\n");
+        break; //Exit loop
+      }
+      //Ignore empty buffers, if it isn't then attempt to run it
+      else if (!buffer.toString().isEmpty())
+      {
+        runCount++; //Increment number of runs
+        //For each command that is made before a semi-colon
+        for(String commands : buffer.toString().split(";"))
+        {
+          int currentProcess = 0;
+          for(String parallelCommands : commands.split("&"))
+          {
+            String[] args = SysLib.stringToArgs(parallelCommands);
+            //Check length validity
+            if(args.length < 0)
+            {
+              SysLib.cout("Error found in length of command");
+              break;
+            }
+            else if(args.length > 0)
+            {
+              //Display command run
+              SysLib.cout(args[0] + "\n");
+              //Execute the current process
+              currentProcess = SysLib.exec(args);
+              //Check if there was an error in execution
+              if(currentProcess < 0)
+              {
+                SysLib.cout("Error found in executing argument");
+                break;
+              }
+              //Process execution was successful
+              else
+              {
+                //Add current process to unordered set
+                currentProcesses.add(currentProcess);
+              }
+            }
+          } //End of "&" for each loop
+          //If the HashSet contains items, remove them
+          while(!currentProcesses.isEmpty())
+          {
+            //Wait for child threads to terminate
+            currentProcess = SysLib.join();
+            //Check the status of child termination
+            if(currentProcess < 0)
+            {
+              SysLib.cout("Error found in child termination process");
+              break;
+            }
+            //SysLib.join() was run successfully
+            else
+            {
+              //Check if current HashSet contains process, if so remove it
+              if(currentProcesses.contains(currentProcess))
+              {
+                currentProcesses.remove(currentProcess);
+              }
+            }
+          }
+        } //End of ";"" for each Loop
+      }
+    } //End of while loop
+    //Exit the method
+    SysLib.exit();
+    return;
+  }
 }
-
