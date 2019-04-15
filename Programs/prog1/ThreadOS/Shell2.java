@@ -23,8 +23,7 @@ class Shell2 extends Thread
      int runCount = 1;
      //HashSet (unordered) made to count current processes
      Set<Integer> currentProcesses = new HashSet<Integer>();
-     //Initial starting message
-     SysLib.cout("Shell2 is starting\nEnter 'exit' to quit Shell\n");
+     //While loop to run for any arbitrary number of arguments
      while(true)
      {
       //Print out shell number of statements
@@ -33,11 +32,13 @@ class Shell2 extends Thread
     	SysLib.cin(buffer); //Buffer input
       if(buffer.toString().equals("exit"))
       {
-        SysLib.cout("Exiting\n");
+        SysLib.cout("exit\n");
         break; //Exit loop
       }
-      //Ignore empty buffers, if it isn't then attempt to run it
-      else if (!buffer.toString().isEmpty())
+      //Ignore empty buffers, check error cases of only a ";" or "&"
+      else if (!buffer.toString().isEmpty()
+            || !buffer.toString().equals(";")
+            || !buffer.toString().equals("&"))
       {
         runCount++; //Increment number of runs
         //For each command that is made before a semi-colon
@@ -50,7 +51,7 @@ class Shell2 extends Thread
             //Check length validity
             if(args.length < 0)
             {
-              SysLib.cout("Error found in length of command");
+              SysLib.cout("Error found in length of command\n");
               break;
             }
             else if(args.length > 0)
@@ -62,7 +63,7 @@ class Shell2 extends Thread
               //Check if there was an error in execution
               if(currentProcess < 0)
               {
-                SysLib.cout("Error found in executing argument");
+                SysLib.cout("Error found in executing argument\n");
                 break;
               }
               //Process execution was successful
@@ -81,7 +82,7 @@ class Shell2 extends Thread
             //Check the status of child termination
             if(currentProcess < 0)
             {
-              SysLib.cout("Error found in child termination process");
+              SysLib.cout("Error found in child termination process\n");
               break;
             }
             //SysLib.join() was run successfully
