@@ -18,7 +18,6 @@ public class QueueNode {
    */
   public QueueNode()
   {
-          queueNode.clear();
           queueNode = new Vector<>();
   }
 
@@ -41,6 +40,7 @@ public class QueueNode {
                           SysLib.cerr("Error in sleep() for QueueNode"); //an error has occured
                           SysLib.cerr(ie.toString() + "\n"); //an error has occured
                   }
+                  //Return first queueNode
                   return queueNode.remove(0);
           }
           return -1;

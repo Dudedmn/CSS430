@@ -21,8 +21,8 @@ public class SyncQueue {
      */
     public SyncQueue()
     {
-        queueNode.clear();
         queueNode = new QueueNode[DEFAULT_COND_NUM];
+        //Initializes by creating QueueNode for each element in the queue array
         for(int i = 0; i < DEFAULT_COND_NUM; i++)
         {
             queueNode[i] = new QueueNode();
@@ -33,7 +33,7 @@ public class SyncQueue {
     /**
      * Creates a queue and allow threads to wait for a default condition number
      * or a condMax number of condition/event types.
-     * @param condMax Defines the size of the queue, or the number of queues
+     * @param condMax Defines the size or the number of queues
      */
     public SyncQueue(int condMax)
     {
@@ -51,13 +51,9 @@ public class SyncQueue {
      */
     public int enqueueAndSleep(int condition)
     {
-        if(condition < queueNode.length)
-        {
-            if(condition >= 0)
-            {
+      //Check valid condition
+        if(condition >= 0 && condition < queueNode.length)
                 return queueNode[condition].sleep();
-            }
-        }
         return -1;
     }
 
@@ -68,12 +64,10 @@ public class SyncQueue {
      */
     public void dequeueAndWakeup(int condition)
     {
-        if(condition >= 0)
+        if(condition >= 0 && condition < queueNode.length)
         {
-            if(condition < queueNode.length)
-            {
-                queueNode[condition].wake(DEFAULT_TID);
-            }
+            //DEFAULT_TID == 0
+            queueNode[condition].wake(DEFAULT_TID);
         }
     }
 
@@ -87,12 +81,11 @@ public class SyncQueue {
      */
     public void dequeueAndWakeup(int condition, int tid)
     {
-        if(condition >= 0)
+      //Ensure condition is positive for validity
+        if(condition >= 0 && condition < queueNode.length )
         {
-            if(condition < queueNode.length)
-            {
-                queueNode[condition].wake(tid);
-            }
+            //Wake up the corresponding thread that isn't default
+              queueNode[condition].wake(tid);
         }
     }
 }
