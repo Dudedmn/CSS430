@@ -194,14 +194,32 @@ public class Cache
    */
   private int findVictim()
   {
+    int cycle = victim;
+    boolean dirtyStatus = false, refStatus = false;
     while (true)
      {
-    		victim = (victim + 1) % pageTable.length;
-    		if (!pageTable[victim].referenceBit)
-        {
+
+        victim = (victim + 1) % pageTable.length;
+        //Reset if victim is too large
+        if(victim >= pageTable.length)
+          victim = 0;
+
+    		if (!pageTable[victim].referenceBit && (!pageTable[victim].dirtyBit
+        || dirtyStatus))
     			return victim;
-    		}
-    		pageTable[victim].referenceBit = false;
+
+        //Cycle has been completed
+        if(victim == cycle)
+        {
+          if(dirtyStatus)
+            refStatus = true;
+            //Dirty bit overwrite
+          dirtyStatus = !dirtyStatus;
+        }
+
+        //Reset referenceBit
+        if(refStatus)
+    		  pageTable[victim].referenceBit = false;
       }
   }
   /**
